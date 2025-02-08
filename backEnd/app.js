@@ -21,9 +21,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(cookieParser())
 
 connectDB()
-app.get("/home", (req, res)=>{
-    res.json({message: "home"})
-})
+
 
 app.use("/users", userRouter)
 app.use("/project", projectRouter)
