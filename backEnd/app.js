@@ -7,6 +7,10 @@ import aiRouter from "./routes/ai.route.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 
+// var corsOptions = {
+//     origin: 'http://example.com',
+//     optionsSuccessStatus: 200
+// }
 
 
 const app = express()
@@ -17,6 +21,9 @@ app.use(express.urlencoded({extended: true}))
 app.use(cookieParser())
 
 connectDB()
+app.get("/home", (req, res)=>{
+    res.json({message: "home"})
+})
 
 app.use("/users", userRouter)
 app.use("/project", projectRouter)
