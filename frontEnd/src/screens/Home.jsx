@@ -6,7 +6,7 @@ import UserInfo from "./UserInfo.jsx";
 import { toast, ToastContainer } from "react-toastify";
 
 const Home = () => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const [isModelOpen, setisModelOpen] = useState(false);
   const [projectName, setprojectName] = useState("");
   const [projects, setProjects] = useState([]);
@@ -56,6 +56,8 @@ const Home = () => {
         toast.error("Ooops, Something went wrong. Try Again!!")
       });
   }, [projectCreated, isProjectDeleted]);
+  
+    
 
 
 
@@ -109,7 +111,7 @@ const Home = () => {
       </nav>
 
       <main className="p-4 md:p-8 max-w-7xl mx-auto relative">
-        <h1 className="absolute top-[160%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-[24vw] font-bold whitespace-nowrap w-fit text-[#3030309d] -z-[2] pointer-events-none cursor-none hidden md:block">Mate Ai</h1>
+        <h1 className="absolute top-[160%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-[24vw] font-bold whitespace-nowrap w-fit text-[#30303042] -z-[2] pointer-events-none cursor-none hidden md:block">Mate Ai</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* New Project Card */}
           <button

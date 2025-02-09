@@ -28,7 +28,7 @@ const UserInfo = () => {
     </div>
 
     {showLogout &&(
-      <div className="absolute top-full right-0 mt-2 bg-white shadow-lg rounded-lg p-2 w-48">
+      <div className="absolute top-full right-0 mt-2 bg-white shadow-lg rounded-lg p-2 w-48 z-[999]">
         {/* Email display */}
         <div className="text-sm text-gray-700 mb-2 text-center">
           <p className="font-semibold py-3">{user.email}</p>
