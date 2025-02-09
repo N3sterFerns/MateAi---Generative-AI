@@ -16,6 +16,7 @@ const UserInfo = () => {
       const handleLogout = () => {        
         axios.get("/users/logout").then(()=>{
           localStorage.removeItem("token")
+          localStorage.removeItem("user")
           navigate("/login")
         })
     };
@@ -35,7 +36,7 @@ const UserInfo = () => {
 
         <button
         onClick={handleLogout}
-          className="w-full text-center border-[1px] rounded-md py-1 border-[#D1D5DB] text-red-500 hover:text-red-700 hover:bg-red-200 transition-all">
+          className="w-full text-center border-[1px] rounded-md py-1 border-[#D1D5DB] text-red-500 hover:text-red-700 hover:bg-red-200 transition-all cursor-pointer">
           Logout
         </button>
       </div>
