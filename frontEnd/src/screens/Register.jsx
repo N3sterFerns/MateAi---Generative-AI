@@ -23,7 +23,7 @@ const Register = () => {
             setUser(res.data.userExists)
             navigate("/")
         }).catch((err)=>{
-            console.log(err)
+            toast.error("Invalid Email or Password")     
         })
     }
 
