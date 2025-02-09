@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 
 var corsOptions = {
-    origin: ['https://coral-app-tveys.ondigitalocean.app'],
+    origin: 'https://coral-app-tveys.ondigitalocean.app',
     optionsSuccessStatus: 200
 }
 
