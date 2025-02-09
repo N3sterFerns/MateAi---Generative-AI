@@ -7,14 +7,14 @@ import aiRouter from "./routes/ai.route.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 
-// var corsOptions = {
-//     origin: 'http://example.com',
-//     optionsSuccessStatus: 200
-// }
+var corsOptions = {
+    origin: ['https://coral-app-tveys.ondigitalocean.app', "http://localhost:5173"],
+    optionsSuccessStatus: 200
+}
 
 
 const app = express()
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))

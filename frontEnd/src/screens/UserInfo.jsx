@@ -1,17 +1,21 @@
 import React, { useState } from 'react'
 import { useUserContext } from '../context/user.context';
+import axios from '../config/axios';
+import { useNavigate } from 'react-router-dom';
 
 const UserInfo = () => {
     const { user } = useUserContext();
     const [showLogout, setShowLogout] = useState(false);
+    const navigate = useNavigate()
 
 
     const handleAvatarClick = () => {
         setShowLogout(!showLogout); 
       };
     
-      const handleLogout = () => {
+      const handleLogout = () => {        
         axios.get("/users/logout").then(()=>{
+          localStorage.removeItem("token")
           navigate("/login")
         })
     };

@@ -8,6 +8,7 @@ import hljs from "highlight.js"
 // import "highlight.js/styles/github.css";
 import 'highlight.js/styles/atom-one-dark.css';
 import UserInfo from './UserInfo'
+import { toast, ToastContainer } from 'react-toastify'
 
 const Project = () => {
 
@@ -39,14 +40,6 @@ const Project = () => {
   }
 
   function WriteAiMessage(message) {
-
-    // console.log(message);
-    
-    
-    // const messageObject = JSON.parse(message)
-    console.log(message);
-    const messageBox = document.querySelector(".message-box")
-    // messageBox.scrollTop = messageBox.scrollHeight;
     return (
         <div
             className='overflow-auto bg-slate-950 text-white rounded-sm p-2'
@@ -71,16 +64,12 @@ const Project = () => {
     }
 
     const sendMessages = ()=>{
-      
-      // const input = document.getElementById("messageInput");
-      // if (message.trim()) {
+      if(message.trim() === "") return
+
         sendMessage("project-message", {
           message: message,
           sender: user
         })
-      //   setMessage("")
-      // }
-      console.log(message);
       
       appendOutgoingMessage(message)
       setMessage(prevMessages=> [...prevMessages, {sender: user, message}])
@@ -100,10 +89,10 @@ const Project = () => {
         users: users,
         projectId: location.state.project._id
       }).then((res)=>{
-        console.log(res.data);
         setIsModelOpen(false)
+        toast.success("Collabrator Added Successfully.")
       }).catch((err)=>{
-        console.log(err);
+        toast.error("Ooops, Something went wrong. Try Again!!")
       })
     }
 
@@ -111,46 +100,16 @@ const Project = () => {
       initializeSocket(project._id)
 
       recievedMessage("project-message", (data)=>{
-        console.log(data);
         setMessages(prevMsg=> [...prevMsg, data])
       })
       
       axios.get(`/project/get-project/${project._id}`).then((res)=>{
         setProject(res.data.project)
       }).catch((err)=>{
-        console.log(err);
+        toast.error("Ooops, Something went wrong. Try Again!!")
       })
-
-      // axios.get("/users/all").then((res)=>{
-      //   setUsers(res.data.users)
-      // }).catch((err)=>{
-      //   console.log(err);
-      // })
     }, []) 
 
-    const appendIncomingMessage = (msgObject)=>{
-        const messageBox = document.querySelector(".message-box")
-        const msg = document.createElement("div")
-        msg.classList.add('message', 'flex', 'flex-col', "w-fit" , "relative", "max-w-[15rem]", "p-2", "bg-slate-50", "rounded-md")
-          msg.innerHTML = `
-            <small className='opacity-65 text-xs'>${msgObject.sender?.email}</small>
-            <p>${msgObject.message}</p>
-          `
-        messageBox.appendChild(msg)
-        messageBox.scrollTop = messageBox.scrollHeight;
-      }
-      
-    //   const appendOutgoingMessage = (outgoingMsg)=>{
-    //     const messageBox = document.querySelector(".message-box")
-    //     const msg = document.createElement("div")
-    //     msg.classList.add('message', 'flex', 'flex-col',"w-fit", "text-right", "self-end", "relative", "max-w-[15rem]", "p-2", "bg-slate-50", "rounded-md")
-    //     msg.innerHTML = `
-    //     <small className='opacity-65 text-xs'>${user.email}</small>
-    //     <p>${outgoingMsg}</p>
-    //     `
-    //     // messageBox.scrollTop = messageBox.scrollHeight;
-    //     messageBox.appendChild(msg)
-    // }
 
     const appendOutgoingMessage = (outgoingMsg) => {
       // Use React state instead of direct DOM manipulation
@@ -177,7 +136,7 @@ const Project = () => {
         axios.get(`/users/all/search?email=${email}`).then((res)=>{
             setUsers(res.data.users)            
         }).catch((err)=>{
-          console.log(err);
+          toast.error("Ooops, Something went wrong. Try Again!!")
         })
     }
 
@@ -194,17 +153,22 @@ const Project = () => {
     
   return (
     <main className='h-screen w-screen flex flex-col'>
-  {/* Navbar */}
-  <nav className='w-full bg-white shadow-sm py-3 px-6 flex items-center justify-between'>
-    <div className='flex items-center gap-4'>
-      <button className='md:hidden p-2' onClick={handleSidePanel}>
-        <i className="ri-menu-line text-xl"></i>
-      </button>
-      <h1 className='text-xl font-bold text-slate-800'>Project Chat</h1>
-    </div>
-    
-    <UserInfo/>
-  </nav>
+    <ToastContainer/>
+    {/* Navbar */}
+    <nav className='w-full bg-white shadow-sm py-3 px-3 flex items-center justify-between'>
+      <div className='flex items-center'>
+          <div>
+            <i onClick={()=> navigate("/")} className="ri-arrow-left-s-line text-4xl hidden lg:inline-flex lg:items-center lg:justify-center cursor-pointer"><span className="text-xl font-mono">Back</span></i>
+            <i onClick={()=> navigate("/")} className="ri-arrow-left-s-line text-4xl lg:hidden cursor-pointer"></i>
+          </div>
+        <button className='md:hidden p-2 ' onClick={handleSidePanel}>
+          <i className="ri-menu-line text-xl"></i>
+        </button>
+      </div>
+        <h1 className='text-xl font-bold text-slate-800'>Project {project.name}</h1>
+      
+      <UserInfo/>
+    </nav>
 
   <div className='flex flex-1 overflow-hidden'>
     {/* Sidebar */}
@@ -248,6 +212,39 @@ const Project = () => {
 
     {/* Chat Area */}
     <section className='flex-1 flex flex-col relative'>
+      <div className=' overflow-y-auto scrollbar-none h-dvh'>
+        <div  className="message-box p-1  flex-grow flex flex-col gap-2 ">
+          {messages.map((msg, index) => (
+            <div ref={messageBoxRef} key={`${index}-${msg.sender.user?._id}`} className={`${msg.sender.email === '@mateai' ? 'max-w-80' : 'max-w-52'} ${msg.sender.user && user && msg.sender.user?._id === user._id.toString() ? 'ml-auto' : ''} message overflow-auto scrollbar-none flex flex-col p-2 bg-slate-700 text-white w-fit rounded-md`}>
+              <small className='opacity-65 text-xs'>{msg.sender.email}</small>
+              <div className='text-sm'>
+                {msg.sender.email === '@mateai' ? WriteAiMessage(msg.message) : <p>{msg.message}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+        <div className='p-4 border-t w-full'>
+          <div className='relative'>
+            <input
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className='w-full pl-4 pr-12 py-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500'
+              placeholder='Type @ai your message'
+              onKeyPress={(e) => e.key === 'Enter' && sendMessages()}
+            />
+            <button 
+              onClick={sendMessages}
+              className='absolute right-2 top-1/2 -translate-y-1/2 p-2 hover:bg-slate-100 rounded-full'
+            >
+              <i className="ri-send-plane-2-fill text-blue-600 text-xl"></i>
+            </button>
+          </div>
+        </div>
+
+    </section>
+    {/* <section className='flex-1 flex flex-col relative'>
       <div className=' h-[85vh] overflow-y-auto scrollbar-none'>
         <div  className="message-box p-1  flex-grow flex flex-col gap-2 ">
           {messages.map((msg, index) => (
@@ -266,7 +263,7 @@ const Project = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className='w-full pl-4 pr-12 py-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500'
-              placeholder='Type your message...'
+              placeholder='Type @ai your message'
               onKeyPress={(e) => e.key === 'Enter' && sendMessages()}
             />
             <button 
@@ -279,7 +276,7 @@ const Project = () => {
         </div>
       </div>
 
-    </section>
+    </section> */}
 
     {/* Add Collaborator Modal */}
     {isModelOpen && (

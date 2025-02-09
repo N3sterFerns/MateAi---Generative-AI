@@ -19,6 +19,7 @@ const Register = () => {
             password: password
         }).then((res)=>{
             localStorage.setItem("token", res.data.token);
+            localStorage.setItem('user', JSON.stringify(res.data.userExists))
             setUser(res.data.userExists)
             navigate("/")
         }).catch((err)=>{
@@ -27,7 +28,7 @@ const Register = () => {
     }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 flex-col">
+    <div className="h-dvh flex items-center justify-center bg-gray-900 flex-col px-5">
         <div className='mb-5 text-white'>
             <h1 className='text-6xl font-semibold'>Mate <span className='text-blue-500'>Ai</span></h1>
         </div>

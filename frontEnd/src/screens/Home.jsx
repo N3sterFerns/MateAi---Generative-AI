@@ -3,6 +3,7 @@ import { useUserContext } from "../context/user.context.jsx";
 import { useNavigate } from "react-router-dom";
 import axios from "../config/axios.js";
 import UserInfo from "./UserInfo.jsx";
+import { toast, ToastContainer } from "react-toastify";
 
 const Home = () => {
   const { user } = useUserContext();
@@ -25,9 +26,10 @@ const Home = () => {
       .then((res) => {
         setisModelOpen(false);
         setProjectCreated(true);
+        toast.success("Project Created Successfully.")
       })
       .catch((err) => {
-        console.log(err);
+        toast.error("Ooops, Something went wrong.")
       });
   };
 
@@ -36,23 +38,22 @@ const Home = () => {
       .get(`/project/remove/${id}`)
       .then(() => {
         setIsProjectDeleted(true);
+        toast.success("Project Deleted Successfully.")
       })
       .catch((err) => {
-        console.log(err);
+        toast.error("Ooops, Something went wrong. Try Again!!")
       });
-  };
-
-  useEffect(() => {
-    console.log("deleted");
-
-    axios
+    };
+    
+    useEffect(() => {
+      axios
       .get("/project/all")
       .then((res) => {
         setProjects(res.data.projects);
         navigate("/");
       })
       .catch((err) => {
-        console.log(err);
+        toast.error("Ooops, Something went wrong. Try Again!!")
       });
   }, [projectCreated, isProjectDeleted]);
 
@@ -62,6 +63,7 @@ const Home = () => {
   return (
     <>
       {/* Navbar */}
+      <ToastContainer/>
       <nav className="bg-white shadow-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
@@ -106,7 +108,8 @@ const Home = () => {
         </div>
       </nav>
 
-      <main className="p-4 md:p-8 max-w-7xl mx-auto">
+      <main className="p-4 md:p-8 max-w-7xl mx-auto relative">
+        <h1 className="absolute top-[160%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-[24vw] font-bold whitespace-nowrap w-fit text-[#3030309d] -z-[2] pointer-events-none cursor-none hidden md:block">Mate Ai</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* New Project Card */}
           <button
@@ -149,7 +152,8 @@ const Home = () => {
                   <span>{project?.users?.length || 0}</span>
                 </div>
                 <span className="text-xs text-gray-400">
-                  Last updated: 2d ago
+                  Last updated: {new Date().toLocaleString('default', { month: 'long' })} {new Date().getDate()} at {new Date().toLocaleTimeString('en-US', { hour12: false })} PM (PDT)
+                  {/* Last updated: 2d ago */}
                 </span>
               </div>
             </div>
