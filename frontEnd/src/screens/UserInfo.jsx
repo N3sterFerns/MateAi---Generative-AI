@@ -13,7 +13,9 @@ const UserInfo = () => {
         setShowLogout(!showLogout); 
       };
     
-      const handleLogout = () => {        
+      const handleLogout = () => {   
+        console.log("logout");
+             
         axios.get("/users/logout").then(()=>{
           localStorage.removeItem("token")
           localStorage.removeItem("user")

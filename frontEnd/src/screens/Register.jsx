@@ -17,10 +17,10 @@ const Register = () => {
         axios.post("/users/register", {
             email: email,
             password: password
-        }).then((res)=>{
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem('user', JSON.stringify(res.data.userExists))
-            setUser(res.data.userExists)
+        }).then((res)=>{            
+            localStorage.setItem("token", res.data.token);            
+            localStorage.setItem('user', JSON.stringify(res.data.user))
+            setUser(res.data.user)
             navigate("/")
         }).catch((err)=>{
             toast.error("Invalid Email or Password")     

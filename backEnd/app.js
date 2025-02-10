@@ -8,7 +8,8 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 
 var corsOptions = {
-    origin: ['https://whale-app-jen2i.ondigitalocean.app', "http://localhost:5173"],
+    // origin: ['https://whale-app-jen2i.ondigitalocean.app', "http://localhost:5173"],
+    origin: ['https://whale-app-jen2i.ondigitalocean.app'],
     optionsSuccessStatus: 200
 }
 
